@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Signalisation</title>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+
+<body style="font-family: Arial; padding:20px;">
+
+<h1>Gestion Signalisation</h1>
+
+<input id="search" placeholder="Recherche..." oninput="render()" />
+
+<div id="list"></div>
+
+<h2>Commande</h2>
+<div id="commande"></div>
+
+<button onclick="generatePDF()">Générer PDF</button>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+const DATA = [
+  { nom: "Travaux en cours", dimensions: ["300x300","600x600","900x900"] },
+  { nom: "Déviation", dimensions: ["600x600","900x900"] }
+];
+
+let commande = [];
+
+function render() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  DATA.filter(i => i.nom.toLowerCase().includes(search)).forEach(item => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <b>${item.nom}</b>
+      <select id="dim-${item.nom}">
+        ${item.dimensions.map(d => `<option>${d}</option>`).join("")}
+      </select>
+      <input type="number" id="qty-${item.nom}" value="1" />
+      <button onclick="addItem('${item.nom}')">Ajouter</button>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+function addItem(nom) {
+  const dimension = document.getElementById(`dim-${nom}`).value;
+  const quantite = document.getElementById(`qty-${nom}`).value;
+
+  commande.push({ nom, dimension, quantite });
+  renderCommande();
+}
+
+function renderCommande() {
+  const div = document.getElementById("commande");
+  div.innerHTML = "";
+
+  commande.forEach(i => {
+    div.innerHTML += `${i.nom} - ${i.dimension} - ${i.quantite}<br>`;
+  });
+}
+
+function generatePDF() {
+  const doc = new jsPDF();
+  doc.text("Commande chantier", 10, 10);
+
+  commande.forEach((i, index) => {
+    doc.text(`${i.nom} - ${i.dimension} - ${i.quantite}`, 10, 20 + index * 10);
+  });
+
+  doc.save("commande.pdf");
+}
+
+render();
+</script>
+
+</body>
+</html>
