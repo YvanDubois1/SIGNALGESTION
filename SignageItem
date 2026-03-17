@@ -1,0 +1,55 @@
+{
+  "name": "SignageItem",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Code officiel du panneau (ex: T-010, D-050)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nom du panneau"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description du panneau"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Danger",
+        "Travaux",
+        "Prescription",
+        "Indication",
+        "Direction",
+        "Signaleur",
+        "D\u00e9tour",
+        "Fin de zone"
+      ],
+      "description": "Type de signalisation"
+    },
+    "color": {
+      "type": "string",
+      "enum": [
+        "Orange",
+        "Rouge",
+        "Jaune",
+        "Vert",
+        "Bleu",
+        "Blanc",
+        "Noir"
+      ],
+      "description": "Couleur principale du panneau"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "URL de l'image du panneau"
+    }
+  },
+  "required": [
+    "code",
+    "name",
+    "type",
+    "color"
+  ]
+}
